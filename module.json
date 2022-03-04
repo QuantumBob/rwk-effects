@@ -1,0 +1,26 @@
+{
+    "name": "rwk-effects",
+    "title": "RWK Effects",
+    "description": "turns on effects mainly lighting",
+    "author": "Rob Kirk",
+    "version": "This is auto replaced",
+    "minimumCoreVersion": "0.9",
+    "compatibleCoreVersion": "0.9",
+    "dependencies": [],
+    "esmodules": [
+        "/scripts/module.js"
+    ],
+    "styles": [
+        "/styles/module.css"
+    ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "languages/en.json"
+        }
+    ],
+    "url": "This is auto replaced",
+    "manifest": "This is auto replaced",
+    "download": "This is auto replaced"
+}
