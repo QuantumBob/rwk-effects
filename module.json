@@ -8,10 +8,10 @@
     "compatibleCoreVersion": "0.9",
     "dependencies": [],
     "esmodules": [
-        "/scripts/module.js"
+        "/scripts/rwk-effects.js"
     ],
     "styles": [
-        "/styles/module.css"
+        "/styles/rwk-effects.css"
     ],
     "languages": [
         {
