@@ -30,10 +30,10 @@ const ASCII = `    __________________________
 
 Hooks.on("init", () => {
 
-    console.log(`RWK Effects From Roll | Initializing the RWK ATL addon\n${ASCII}`);
+    console.log(`RWK Effects | Initializing the RWK ATL effects addon\n${ASCII}`);
 
     if (game.system.data.name !== "dnd5e") {
-        console.error(`RWK Effects From Roll needs DnD5e`);
+        console.error(`RWK Effects | This module needs DnD5e`);
         return;
     }
 });
@@ -41,9 +41,10 @@ Hooks.on("init", () => {
 Hooks.on("ready", () => {
 
     if (game.system.data.name !== "dnd5e") {
-        ui.notifications.info("RWK Effects From Roll needs DnD5e");
+        ui.notifications.info("RWK Effects needs DnD5e");
         return;
     }
+    ui.notifications.info("RWK Effects is great");
 
     Hooks.on("preUpdateItem", async (item, change) => {
 
