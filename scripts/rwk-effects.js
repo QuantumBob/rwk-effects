@@ -91,7 +91,7 @@ Hooks.on("ready", () => {
 
             const light = await template.parent.createEmbeddedDocuments("AmbientLight", lightData);
 
-            const key = "flags.effects-from-roll." + template.id;
+            const key = "flags.rwk-effects." + template.id;
             const updateData = {
                 [key]: light[0].id,
             };
@@ -102,7 +102,7 @@ Hooks.on("ready", () => {
 
     Hooks.on("deleteMeasuredTemplate", async (template) => {
 
-        const lightID = template.getFlag('effects-from-roll', template.id);
+        const lightID = template.getFlag('rwk-effects', template.id);
         // if (lightID !== "undefined") {
         if (typeof lightID !== 'undefined') {
             const light = template.parent.getEmbeddedDocument("AmbientLight", lightID);
