@@ -37,10 +37,10 @@
 
 //     console.log(`RWK Effects | Initializing the RWK ATL effects addon\n${ASCII}`);
 
-    // if (game.system.data.name !== "dnd5e") {
-    //     console.error(`RWK Effects | This module needs DnD5e`);
-    //     return;
-    // }
+// if (game.system.data.name !== "dnd5e") {
+//     console.error(`RWK Effects | This module needs DnD5e`);
+//     return;
+// }
 
 // });
 
@@ -57,23 +57,111 @@
 // });
 
 
-// Hooks.on("preUpdateActiveEffect", async (effect, change, options, id) => {
+Hooks.on("preUpdateActiveEffect", async (effect, change, options, id) => {
+    // ui.notifications.info("Stop");
 
-//     // only check for change in disabled status
-//     if (typeof change.disabled === 'undefined' || change.disabled === false)
-//         return;
-//     // make sure effect is on an actor not an item
-//     if (!effect.parent || !(effect.parent instanceof CONFIG.Actor.documentClass))
-//         return true;
-//     // check if the effect has a macro
-//     for (let change of effect.data.changes) {
-//         if (change.key.includes("macro.execute")) {
-//             // delete all token magic filters
-//             // TODO expand to check other actors in the scene. ie if a spell was cast on someone else
-//             // game.macros.getName("00 - A - Delete filters on Selected").execute();
-//         }
-//     }
+    //     // only check for change in disabled status
+    //     if (typeof change.disabled === 'undefined' || change.disabled === false)
+    //         return;
+    //     // make sure effect is on an actor not an item
+    //     if (!effect.parent || !(effect.parent instanceof CONFIG.Actor.documentClass))
+    //         return true;
+    //     // check if the effect has a macro
+    //     for (let change of effect.data.changes) {
+    //         if (change.key.includes("macro.execute")) {
+    //             // delete all token magic filters
+    //             // TODO expand to check other actors in the scene. ie if a spell was cast on someone else
+    //             // game.macros.getName("00 - A - Delete filters on Selected").execute();
+    //         }
+    //     }
+});
+
+Hooks.on("preCreateActiveEffect", async (activeEffect, data, options, id) => {
+    console.log("RWK | in preCreateActiveEffect", "hp", activeEffect.parent.data.data.attributes.hp.value);
+});
+
+Hooks.on("preDeleteActiveEffect", async (activeEffect, options, id) => {
+    console.log("RWK | in preDeleteActiveEffect", "hp", activeEffect.parent.data.data.attributes.hp.value);
+
+    for (const actorEffect of activeEffect.parent.effects) {
+        const effectLabel = activeEffect.data.label;
+        for (const key in actorEffect.data.flags["rwk-effects"]) {
+            if (effectLabel === key) {
+                return false;
+            }
+        }
+    }
+});
+
+Hooks.on("applyActiveEffect", async (actor, change) => {
+    console.log("RWK | in preDeleteActiveEffect", "hp", actor.data.data.attributes.hp.value);
+});
+
+// Hooks.on("preCreateChatMessage", async (chatMessage, data, options, id) => {
+//     console.log("RWK |", data);
 // });
+
+// Hooks.on("preDeleteChatMessage", async (chatMessage, options, id) => {
+//     console.log("RWK |", chatMessage);
+// });
+
+Hooks.on("renderChatMessage", async (message, html, data) => {
+    const action = "applyEffects";
+    const buttonContainer = ".card-buttons"
+    html.find(`[data-action='${action}']`).click(async (event) => {
+        // event.preventDefault();
+        // event.stopPropagation();
+        onApplyEffectsButton(event.currentTarget, html, data, buttonContainer);
+    });
+});
+
+async function onApplyEffectsButton(target, html, data, buttonContainer) {
+
+    let targets = Array.from(game.user.targets)
+    for (const token of targets) {
+        let tactor = await game.actors.get(token.data.actorId);
+        let actor;
+        actor = tactor.actor ? tactor.actor : tactor;
+        for (const actorEffect of actor.effects) {
+            const effect = actorEffect.data.label;
+            actorEffect.data.flags["rwk-effects"] = { [effect]: true };
+            console.log("RWK |");
+        }
+
+    }
+
+
+    // let li = $(target).parents(".item");
+    // if (!li.hasClass("expanded"))
+    //     return;
+    // let item = app.object.items.get(li.attr("data-item-id"));
+    // if (!item)
+    //     return;
+    // let targetHTML = $(target.parentNode.parentNode);
+    // let buttonTarget = targetHTML.find(".item-buttons");
+    // let buttonsWereAdded = false;
+    // // Create the button
+    // switch (item.data.type) {
+    //     case "spell":
+    //         buttonTarget.find(".tag:last").after(`<span class="tag"><button data-action="stopSpell" data-item="${item.id}" data-parent="${item.parent.id}">Stop Spell</button></span>`);
+    //         break;
+    // }
+    // buttonsWereAdded = true;
+    // if (buttonsWereAdded) {
+    //     // adding the buttons to the sheet
+    //     targetHTML.find(buttonContainer).prepend(buttonTarget);
+    //     buttonTarget.find("button").click({ app, data, html }, async (ev) => {
+    //         ev.preventDefault();
+    //         ev.stopPropagation();
+    //         let event = { shiftKey: ev.shiftKey == true, ctrlKey: ev.ctrlKey === true, metaKey: ev.metaKey === true, altKey: ev.altKey === true };
+
+    //         switch (ev.target.dataset.action) {
+    //             case "stopSpell":
+    //                 await stopSpell({ event, item: ev.target.dataset.item, parent: ev.target.dataset.parent, versatile: false, resetAdvantage: true });
+    //         }
+    //     });
+    // }
+}
 
 // Hooks.on("preUpdateItem", async (item, change) => {
 
